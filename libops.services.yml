@@ -3,3 +3,8 @@ services:
     class: Drupal\libops\Config\UriOverride
     tags:
       - {name: config.factory.override, priority: 255}
+  libops.cache_headers_subscriber:
+    class: Drupal\libops\EventSubscriber\CacheHeadersSubscriber
+    arguments: ['@config.factory']
+    tags:
+      - { name: event_subscriber }
