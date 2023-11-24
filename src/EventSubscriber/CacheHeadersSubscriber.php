@@ -49,8 +49,11 @@ final class CacheHeadersSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    // ten days
-    $response->headers->set('Cache-Control', 'public, max-age=864000');
+    // don't let browsers cache HTML responses
+    // cdn can cache responses for one day
+    // cdn can serve stale cache for one day
+    // since we're setting s-maxage, we don't need the public directive
+    $response->headers->set('Cache-Control', 'max-age=0, s-maxage=86400, stale-while-revalidate=86400');
     // satisfy https://cloud.google.com/cdn/docs/caching#non-cacheable_content
     // make sure google cloud cdn adds Vary: cookie header in response
     if ($response->headers->get('Vary') == 'Cookie') {
